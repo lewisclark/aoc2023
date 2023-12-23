@@ -5,10 +5,10 @@ mod day2;
 mod day3;
 mod day4;
 mod day5;
-/*
 mod day6;
 mod day7;
 mod day8;
+/*
 mod day9;
 mod day10;
 mod day11;
@@ -54,6 +54,9 @@ fn main() {
         3 => day3::solve(&input, is_part_2),
         4 => day4::solve(&input, is_part_2),
         5 => day5::solve(&input, is_part_2),
+        6 => day6::solve(&input, is_part_2),
+        7 => day7::solve(&input, is_part_2),
+        8 => day8::solve(&input, is_part_2),
         _ => unimplemented!(),
     };
 

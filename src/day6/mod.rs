@@ -1,21 +1,14 @@
 use std::str::FromStr;
 
-pub fn solve(part_2: bool) {
-    let path = "src/day6/input.txt";
-
-    let input = if part_2 {
-        let input = std::fs::read_to_string(path).unwrap();
-
-        input.replace(" ", "")
-    } else {
-        std::fs::read_to_string(path).unwrap()
+pub fn solve(input: &str,is_part_2: bool) -> String {
+    let races = match is_part_2 {
+        false => Race::parse_list(input),
+        true => Race::parse_list(&input.replace(" ", "")),
     };
 
     let mut wins = Vec::new();
 
-    for race in Race::parse_list(&input) { 
-        dbg!(&race);
-
+    for race in races {
         let mut num_wins = 0;
 
         for hold_time in 1..race.time {
@@ -29,8 +22,7 @@ pub fn solve(part_2: bool) {
         wins.push(num_wins);
     }
 
-    dbg!(&wins);
-    dbg!(wins.into_iter().fold(1, |v, x| v * x));
+    wins.into_iter().fold(1, |v, x| v * x).to_string()
 }
 
 #[derive(Debug)]

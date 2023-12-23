@@ -4,23 +4,21 @@ use std::cmp::Ordering;
 
 type Bid = u64;
 
+// poor decision
 const PART_2: bool = true;
 
-pub fn solve() {
-    let input_filename = "src/day7/input.txt";
-    let input = std::fs::read_to_string(input_filename).unwrap();
-
+pub fn solve(input: &str, _is_part_2: bool) -> String {
     let mut hand_bids = parse_input(&input);
 
     hand_bids.sort_by(|(hand1, _bid1), (hand2, _bid2)| {
         hand1.cmp(&hand2)
     });
 
-    println!("{}",
-        hand_bids
+    hand_bids
         .into_iter()
         .enumerate()
-        .fold(0, |x, (i, (_hand, bid))| x + (i + 1) * bid as usize));
+        .fold(0, |x, (i, (_hand, bid))| x + (i + 1) * bid as usize)
+        .to_string()
 }
 
 fn parse_input(input: &str) -> Vec<(Hand, Bid)> {
