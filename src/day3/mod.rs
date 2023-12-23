@@ -1,14 +1,16 @@
 use std::str::FromStr;
 use std::collections::HashMap;
 
-pub fn solve() {
-    println!("Part 1: {}", solve_1("src/day3/basic_input.txt"));
-    println!("Part 2: {}", solve_2("src/day3/basic_input.txt"));
+pub fn solve(input: &str, is_part_2: bool) -> String {
+    match is_part_2 {
+        false => solve_1(input),
+        true => solve_2(input),
+    }.to_string()
 }
 
-fn solve_1(input_path: &str) -> u32 {
-    let input = std::fs::read_to_string(input_path).unwrap();
+// TODO: Remove duplication
 
+fn solve_1(input: &str) -> u32 {
     let mut sch: Vec<Vec<char>> = Vec::new();
 
     for line in input.lines() {
@@ -57,9 +59,7 @@ fn solve_1(input_path: &str) -> u32 {
     sum
 }
 
-fn solve_2(input_path: &str) -> u32 {
-    let input = std::fs::read_to_string(input_path).unwrap();
-
+fn solve_2(input: &str) -> u32 {
     let mut sch: Vec<Vec<char>> = Vec::new();
 
     for line in input.lines() {

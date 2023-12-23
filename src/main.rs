@@ -1,11 +1,11 @@
 use std::str::FromStr;
 
 mod day1;
-/*
 mod day2;
 mod day3;
 mod day4;
 mod day5;
+/*
 mod day6;
 mod day7;
 mod day8;
@@ -50,9 +50,13 @@ fn main() {
 
     let res = match day {
         1 => day1::solve(&input, is_part_2),
+        2 => day2::solve(&input, is_part_2),
+        3 => day3::solve(&input, is_part_2),
+        4 => day4::solve(&input, is_part_2),
+        5 => day5::solve(&input, is_part_2),
         _ => unimplemented!(),
     };
 
-    println!("Day {}, part {}\n", day, part);
+    println!("Running day {}, part {}\n", day, part);
     println!("{}", res);
 }

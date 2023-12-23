@@ -1,14 +1,14 @@
 use std::str::FromStr;
 use std::collections::HashMap;
 
-pub fn solve() {
-    println!("Part 1: {}", solve_1("src/day4/basic_input.txt"));
-    println!("Part 2: {}", solve_2("src/day4/basic_input.txt"));
+pub fn solve(input: &str, is_part_2: bool) -> String {
+    match is_part_2 {
+        false => solve_1(input),
+        true => solve_2(input) as usize,
+    }.to_string()
 }
 
-fn solve_1(input_path: &str) -> usize {
-    let input = std::fs::read_to_string(input_path).unwrap();
-
+fn solve_1(input: &str) -> usize {
     let mut points_sum = 0;
 
     for card in parse_cards(&input) {
@@ -29,9 +29,7 @@ fn solve_1(input_path: &str) -> usize {
     points_sum
 }
 
-fn solve_2(input_path: &str) -> u32 {
-    let input = std::fs::read_to_string(input_path).unwrap();
-
+fn solve_2(input: &str) -> u32 {
     let cards = parse_cards(&input);
     let mut total_cards = 0;
     let mut card_winners_cache: HashMap<u32, u32> = HashMap::new();

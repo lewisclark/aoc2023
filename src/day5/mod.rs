@@ -1,20 +1,10 @@
 use std::str::FromStr;
 
-pub fn solve() {
-    println!("Part 1: {}", solve_1("src/day5/basic_input.txt"));
-    println!("Part 2: {}", solve_2("src/day5/basic_input.txt"));
-}
-
-fn solve_1(input_path: &str) -> u64 {
-    let input = std::fs::read_to_string(input_path).unwrap();
-
-    Almanac::parse(&input, false).process()
-}
-
-fn solve_2(input_path: &str) -> u64 {
-    let input = std::fs::read_to_string(input_path).unwrap();
-
-    Almanac::parse(&input, true).process()
+pub fn solve(input: &str, is_part_2: bool) -> String {
+    match is_part_2 {
+        false => Almanac::parse(input, false).process(),
+        true => Almanac::parse(input, true).process(),
+    }.to_string()
 }
 
 struct Almanac {
