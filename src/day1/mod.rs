@@ -1,18 +1,10 @@
 use std::collections::HashMap;
 
-pub fn solve() {
-    println!("Part 1: {}",
-        std::fs::read_to_string("src/day1/basic_input_1.txt")
-            .unwrap()
-            .lines()
-            .fold(0, |acc, l| acc + line_num(l, true)));
-
-    println!("Part 2: {}",
-        std::fs::read_to_string("src/day1/basic_input_2.txt")
-            .unwrap()
-            .lines()
-            .fold(0, |acc, l| acc + line_num(l, false)));
-
+pub fn solve(input: &str, is_part_2: bool) -> String {
+    match is_part_2 {
+        false => input.lines().fold(0, |acc, l| acc + line_num(l, true)),
+        true => input.lines().fold(0, |acc, l| acc + line_num(l, false)),
+    }.to_string()
 }
 
 fn line_num(s: &str, digits_only: bool) -> usize {
