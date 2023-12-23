@@ -1,13 +1,13 @@
-pub fn solve_1() {
-    let input = std::fs::read_to_string("src/day11/basic_input.txt").unwrap();
+pub fn solve(input: &str, is_part_2: bool) -> String {
     let mut map = parse(&input);
 
-    //print_map(&map);
-
-    println!("dist_sum: {}", better_dist_sum(&mut map, 2));
-    //println!("dist_sum: {}", basic_dist_sum(&mut map, 2));
+    match is_part_2 {
+        false => better_dist_sum(&mut map, 2),
+        true => better_dist_sum(&mut map, 1000000),
+    }.to_string()
 }
 
+/*
 fn basic_dist_sum(map: &mut Vec<Vec<char>>, expand_factor: usize) -> usize {
     expand_map(map, expand_factor);
 
@@ -33,6 +33,7 @@ fn basic_dist_sum(map: &mut Vec<Vec<char>>, expand_factor: usize) -> usize {
 
     dist_sum as usize
 }
+*/
 
 fn better_dist_sum(map: &mut Vec<Vec<char>>, expand_factor: isize) -> usize {
     let galaxies = get_galaxies(&map);
@@ -71,6 +72,7 @@ fn parse(input: &str) -> Vec<Vec<char>> {
         .collect()
 }
 
+/*
 fn print_map(map: &Vec<Vec<char>>) {
     map
         .iter()
@@ -108,6 +110,7 @@ fn expand_map(map: &mut Vec<Vec<char>>, mut expand_factor: usize) {
         }
     }
 }
+*/
 
 fn is_empty_row(map: &Vec<Vec<char>>, y: usize) -> bool {
     map[y].iter().all(|c| *c == '.')
@@ -127,11 +130,13 @@ fn is_empty_column(map: &Vec<Vec<char>>, x: usize) -> bool {
     true
 }
 
+/*
 fn expand_column(map: &mut Vec<Vec<char>>, x: usize) {
     for y in 0..map.len() {
         map[y].insert(x, '.');
     }
 }
+*/
 
 fn get_galaxies(map: &Vec<Vec<char>>) -> Vec<(usize, usize)> {
     let mut galaxies = Vec::new();

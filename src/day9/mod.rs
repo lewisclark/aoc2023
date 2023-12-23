@@ -1,7 +1,13 @@
 use std::str::FromStr;
 
-pub fn solve_1() {
-    let input = std::fs::read_to_string("src/day9/input.txt").unwrap();
+pub fn solve(input: &str, is_part_2: bool) -> String {
+    match is_part_2 {
+        false => solve_1(input),
+        true => solve_2(input),
+    }.to_string()
+}
+
+fn solve_1(input: &str) -> isize {
     let v = parse(&input);
 
     let mut v = v
@@ -29,11 +35,10 @@ pub fn solve_1() {
             acc + seq.first().unwrap().last().unwrap()
         });
 
-    println!("ans: {}", ans);
+    ans
 }
 
-pub fn solve_2() {
-    let input = std::fs::read_to_string("src/day9/input.txt").unwrap();
+fn solve_2(input: &str) -> isize {
     let v = parse(&input);
 
     let mut v = v
@@ -61,7 +66,7 @@ pub fn solve_2() {
             acc + seq.first().unwrap().first().unwrap()
         });
 
-    println!("ans: {}", ans);
+    ans
 }
 
 fn build_seq_list(v: &mut Vec<Vec<Vec<isize>>>) {

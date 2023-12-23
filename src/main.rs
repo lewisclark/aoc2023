@@ -8,11 +8,9 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
-/*
 mod day9;
 mod day10;
 mod day11;
-*/
 
 fn main() {
     println!("AOC 2023!");
@@ -57,6 +55,9 @@ fn main() {
         6 => day6::solve(&input, is_part_2),
         7 => day7::solve(&input, is_part_2),
         8 => day8::solve(&input, is_part_2),
+        9 => day9::solve(&input, is_part_2),
+        10 => day10::solve(&input, is_part_2),
+        11 => day11::solve(&input, is_part_2),
         _ => unimplemented!(),
     };
 

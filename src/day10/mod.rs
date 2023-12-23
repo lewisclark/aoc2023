@@ -1,26 +1,16 @@
-pub fn solve_1() {
-    let input = std::fs::read_to_string("src/day10/input.txt").unwrap();
-
-    println!("{}", input);
-
+pub fn solve(input: &str, is_part_2: bool) -> String {
     let mut pipes = parse_input(&input);
     let (start_x, start_y) = find_start(&pipes);
-    let (width, height) = (pipes[0].len(), pipes.len());
 
-    println!("start: ({}, {})", start_x, start_y);
-    println!("width, height = ({}, {})", width, height);
+    let (distance, interior_points) = walk(&mut pipes, start_x, start_y);
 
-    print_pipes(&pipes);
-
-    println!("half distance: {:?}", walk(&mut pipes, start_x, start_y) / 2);
-
-    print_pipes(&pipes);
-
-    println!("space: {}", pipes
-        .iter()
-        .fold(0, |acc, line| acc + line.into_iter().filter(|c| !['#', '%'].contains(c)).count()));
+    match is_part_2 {
+        false => distance / 2,
+        true => interior_points,
+    }.to_string()
 }
 
+/*
 fn flood_fill(pipes: &mut Vec<Vec<char>>, x: usize, y: usize) {
     if x >= pipes[0].len() || y >= pipes.len() {
         return;
@@ -37,6 +27,7 @@ fn flood_fill(pipes: &mut Vec<Vec<char>>, x: usize, y: usize) {
     flood_fill(pipes, x.wrapping_sub(1), y);
     flood_fill(pipes, x + 1, y);
 }
+*/
 
 fn parse_input(input: &str) -> Vec<Vec<char>> {
     input
@@ -57,6 +48,7 @@ fn find_start(pipes: &Vec<Vec<char>>) -> (usize, usize) {
     panic!()
 }
 
+/*
 fn print_pipes(pipes: &Vec<Vec<char>>) {
     println!("{}", pipes
         .into_iter()
@@ -69,8 +61,9 @@ fn print_pipes(pipes: &Vec<Vec<char>>) {
         .trim()
     );
 }
+*/
 
-fn walk(pipes: &mut Vec<Vec<char>>, start_x: usize, start_y: usize) -> usize {
+fn walk(pipes: &mut Vec<Vec<char>>, start_x: usize, start_y: usize) -> (usize, usize) {
     pipes[start_y][start_x] = '#';
 
     let mut vertices: Vec<(usize, usize)> = Vec::new();
@@ -147,14 +140,8 @@ fn walk(pipes: &mut Vec<Vec<char>>, start_x: usize, start_y: usize) -> usize {
         distance += 1;
     }
 
-    println!("vertices: {:?}", vertices);
-
     let area = shoelace_area(&vertices);
-
     let interior_num = area - (distance / 2) + 1;
-
-    println!("area: {}", area);
-    println!("interior_num: {}", interior_num);
 
     /*
     for (path_x, path_y, dir) in path.into_iter() {
@@ -168,7 +155,7 @@ fn walk(pipes: &mut Vec<Vec<char>>, start_x: usize, start_y: usize) -> usize {
     }
     */
 
-    distance
+    (distance, interior_num)
 }
 
 fn shoelace_area(vertices: &[(usize, usize)]) -> usize {
