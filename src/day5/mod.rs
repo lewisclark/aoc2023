@@ -1,41 +1,20 @@
 use std::str::FromStr;
 
-pub fn solve(input_path: &str) {
+pub fn solve() {
+    println!("Part 1: {}", solve_1("src/day5/basic_input.txt"));
+    println!("Part 2: {}", solve_2("src/day5/basic_input.txt"));
+}
+
+fn solve_1(input_path: &str) -> u64 {
     let input = std::fs::read_to_string(input_path).unwrap();
-    let almanac = Almanac::parse(&input);
-    let mut min_result = u64::max_value();
 
-    //println!("seeds: {:?}", almanac.seeds);
+    Almanac::parse(&input, false).process()
+}
 
-    for (i, seed) in almanac.seeds.iter().enumerate() {
-        if i % (almanac.seeds.len() / 100) == 0 {
-            println!("{}% done ({}, {})",
-                ((i as f64 / almanac.seeds.len() as f64) * 100.0).round(),
-                i, almanac.seeds.len());
-        }
+fn solve_2(input_path: &str) -> u64 {
+    let input = std::fs::read_to_string(input_path).unwrap();
 
-        let mut n = *seed;
-
-        for map_table in &almanac.maps {
-            for map in map_table {
-                if map.in_src_range(n) {
-                    //println!("[{}] translated {} to {} using {:?}",
-                        //seed, n, map.translate(n), map);
-
-                    n = map.translate(n);
-                    break;
-                }
-            }
-
-            //println!("[{}] no mapping", seed);
-        }
-
-        //println!("soil: {}", n);
-
-        min_result = min_result.min(n);
-    }
-
-    println!("min: {}", min_result);
+    Almanac::parse(&input, true).process()
 }
 
 struct Almanac {
@@ -44,12 +23,14 @@ struct Almanac {
 }
 
 impl Almanac {
-    fn parse(input: &str) -> Self {
+    fn parse(input: &str, part_2: bool) -> Self {
         let input = input.trim();
         let mut lines = input.trim().lines();
 
-        //let seeds = Almanac::parse_seeds_1(lines.next().unwrap());
-        let seeds = Almanac::parse_seeds_2(lines.next().unwrap());
+        let seeds = match part_2 {
+            false => Almanac::parse_seeds_1(lines.next().unwrap()),
+            true => Almanac::parse_seeds_2(lines.next().unwrap()).into_iter().flatten().collect(),
+        };
 
         lines.next().unwrap(); // skip newline
 
@@ -59,9 +40,7 @@ impl Almanac {
             if line.is_empty() {
                 master_maps.push(maps.clone());
                 maps.clear();
-            } else if let Some(colon_pos) = line.find(":") { // header
-                
-            } else {
+            } else if line.find(":").is_none() { // skip header
                 maps.push(Mapping::parse(line));
             }
         }
@@ -71,7 +50,7 @@ impl Almanac {
         }
 
         Self {
-            seeds: seeds.into_iter().flatten().collect(),
+            seeds,
             maps: master_maps,
         }
     }
@@ -89,10 +68,9 @@ impl Almanac {
 
     fn parse_seeds_2(seeds_line: &str) -> Vec<Vec<u64>> {
         let mut seeds = Vec::new();
-
         let single_seeds = Almanac::parse_seeds_1(seeds_line);
-        println!("single_seeds: {:?}", single_seeds);
         let mut i = 0;
+
         while i < single_seeds.len() {
             let start = single_seeds[i];
             let length = single_seeds[i + 1];
@@ -107,10 +85,29 @@ impl Almanac {
             i += 2;
         }
 
-        //println!("range seeds: {:?}", seeds);
-
         seeds
     }
+
+    fn process(&self) -> u64 {
+        let mut min_result = u64::max_value();
+
+        for seed in self.seeds.iter() {
+            let mut n = *seed;
+
+            for map_table in &self.maps {
+                for map in map_table {
+                    if map.in_src_range(n) {
+                        n = map.translate(n);
+                        break;
+                    }
+                }
+            }
+
+            min_result = min_result.min(n);
+        }
+
+        min_result
+        }
 }
 
 #[derive(Clone, Debug)]
